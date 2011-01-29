@@ -9,7 +9,7 @@ We provide some enhancements for the Couch::Server class as the following;
 * Basic Authentication
 * Digest Authentication for Apache Proxy
 * SSL Client Authentication for Stunnel
-* Proxy Authentication for proxy_authentification_handler
+* Proxy Authentication for proxy\_authentification\_handler
 
 Get()/put()/post()/delete() methods are same as the original methods.
 
@@ -52,7 +52,7 @@ It supports following parameters.
     opts["digest_auth"] = ""
     server = Couch::Server.new("localhost", "80", opts)
 
-The value of "digest_auth" is not evaluated.
+The value of "digest\_auth" is not evaluated.
 
 The "cacert" parameter is also available for connecting to SSL port such as 6984 and 443.
 To use this feature, please refer the latter part of this document.
@@ -70,8 +70,8 @@ It supports following parameters.
     opts['user'] = "username"
     opts['password'] = "xxxxxx"
     opts['cacert'] = "/etc/ssl/certs/cacerts_and_server_certs.pem"
-    opts['ssl\_client\_cert'] = OpenSSL::X509::Certificate.new(File.new("/etc/ssl/certs/client.cert.pem"))
-    opts['ssl\_client\_key']  = OpenSSL::PKey::RSA.new(File.new("/etc/ssl/keys/client.key.pem"))
+    opts['ssl_client_cert'] = OpenSSL::X509::Certificate.new(File.new("/etc/ssl/certs/client.cert.pem"))
+    opts['ssl_client_key']  = OpenSSL::PKey::RSA.new(File.new("/etc/ssl/keys/client.key.pem"))
     server = Couch::Server.new("couchdb.example.org", "6984", opts)
 
 The hostname of the first argument must be same as the common name (cn) of the server certificate.

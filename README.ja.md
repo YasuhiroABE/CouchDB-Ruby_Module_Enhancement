@@ -9,7 +9,7 @@ Enhancement of Couch::Server Class
 * Basic認証
 * Digest認証 for Apache Proxy
 * SSLクライアント認証 for Stunnel
-* Proxy認証 for proxy_authentification_handler
+* Proxy認証 for proxy\_authentification\_handler
 
 get/put/post/deleteのメソッドの挙動はオリジナルと同じです。
 
@@ -39,7 +39,7 @@ SSL(6984port, 443port, etc.)を使用するためには cacert オプション�
 詳細は後半の説明を参照してください。
 
 ### Digest認証 for Apache Proxy
-rubyのnet-http-digest_authモジュールが必要です。
+rubyのnet-http-digest\_authモジュールが必要です。
 
 次のパラメータをサポートします。
 
@@ -54,7 +54,7 @@ rubyのnet-http-digest_authモジュールが必要です。
     opts["digest_auth"] = ""
     server = Couch::Server.new("localhost", "80", opts)
 
-値には無関係に"digest_auth"が設定されていれば有効になります。
+値には無関係に"digest\_auth"が設定されていれば有効になります。
 
 SSL(6984port, 443port, etc.)を使用するためには cacert オプションを利用します。
 詳細は後半の説明を参照してください。
@@ -72,8 +72,8 @@ SSL(6984port, 443port, etc.)を使用するためには cacert オプション�
     opts['user'] = "username"
     opts['password'] = "xxxxxx"
     opts['cacert'] = "/etc/ssl/certs/cacerts_and_server_certs.pem"
-    opts['ssl\_client\_cert'] = OpenSSL::X509::Certificate.new(File.new("/etc/ssl/certs/client.cert.pem"))
-    opts['ssl\_client\_key']  = OpenSSL::PKey::RSA.new(File.new("/etc/ssl/keys/client.key.pem"))
+    opts['ssl_client_cert'] = OpenSSL::X509::Certificate.new(File.new("/etc/ssl/certs/client.cert.pem"))
+    opts['ssl_client_key']  = OpenSSL::PKey::RSA.new(File.new("/etc/ssl/keys/client.key.pem"))
     server = Couch::Server.new("couchdb.example.org", "6984", opts)
 
 ホスト名はServer CertificateのCommon Name (CN)と同じである必要があります。
@@ -84,7 +84,7 @@ ruby標準のopenssl, net/httpsライブラリに依存しています。
 * [library net/https for ruby 1.9.2 @doc.okkez.net](http://doc.okkez.net/static/192/library/net=2fhttps.html "Net::HTTPSドキュメント")
 * [library openssl for ruby 1.9.2 @doc.okkez.net](http://doc.okkez.net/static/192/library/openssl.html "OpenSSLドキュメント")
 
-### Proxy認証 for proxy_authentification_handler
+### Proxy認証 for proxy\_authentification\_handler
 次のパラメータをサポートします。
 
 * proxy\_auth\_user (=> X-Auth-CouchDB-UserName)
