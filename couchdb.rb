@@ -91,7 +91,9 @@ module Couch
       
       client = Net::HTTP.new(@host, @port)
       check_ssl(client)
-      
+    
+      client.set_debug_output $stderr if @options.has_key?('debug') and @options['debug']
+  
       if @options.has_key?('digest_auth')
         req["Authorization"] = @auth
       end
