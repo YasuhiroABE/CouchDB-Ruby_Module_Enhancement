@@ -1,34 +1,54 @@
 # -*- coding: utf-8 -*-
+
 #
-#== Original License
-# The original "Couch" module comes from the couchdb wiki at;
+# The original code is located at the CouchDB Wiki
 #
 #   http://wiki.apache.org/couchdb/Getting_started_with_Ruby
 #
-# Please refer the original code named couchdb.rb.orig in the same directory.
-#
-#== License of my part
-# Part of my code is licensed by; 
-#
-#  Copyright (C) 2010,2011 Yasuhiro ABE <yasu@yasundial.org>
-#
-#  Licensed under the Apache License, Version 2.0 (the "License");
-#  you may not use this file except in compliance with the License.
-#  You may obtain a copy of the License at
-#  
-#       http://www.apache.org/licenses/LICENSE-2.0
-#  
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#  See the License for the specific language governing permissions and
-#  limitations under the License.
+# Please refer the original code.
 #
 
-require 'net/https'
 module Couch
-
+  
+  # == Description
+  #
+  # This version of the Couch::Server class is modified for additional authentication methods.
+  # It supports the following authentication methods with or without SSL connection;
+  #
+  # * Basic Authentication
+  # * Digest Authentication (net-http-digest_auth library is required)
+  # * SSL Client Authentication
+  #   * It is not supported by the CouchDB server, other server application, such as stunnel, is required)
+  # * CouchDB Proxy Authentication
+  #
+  # == About the original code
+  #
+  # The original "Couch" module is describe at the couchdb wiki;
+  #
+  #   http://wiki.apache.org/couchdb/Getting_started_with_Ruby
+  #
+  # Please refer the original file, couchdb.rb.orig, in the same directory.
+  #
+  # == License
+  #
+  # The modified code is licensed by the following term; 
+  #
+  #  Copyright (C) 2010,2011 Yasuhiro ABE <yasu@yasundial.org>
+  #
+  #  Licensed under the Apache License, Version 2.0 (the "License");
+  #  you may not use this file except in compliance with the License.
+  #  You may obtain a copy of the License at
+  #  
+  #       http://www.apache.org/licenses/LICENSE-2.0
+  #  
+  #  Unless required by applicable law or agreed to in writing, software
+  #  distributed under the License is distributed on an "AS IS" BASIS,
+  #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  #  See the License for the specific language governing permissions and
+  #  limitations under the License.
+  
   class Server
+    require 'net/https'
     def initialize(host, port, options = nil)
       @host = host
       @port = port
@@ -68,19 +88,6 @@ module Couch
       request(req)
     end
 
-    def check_ssl(client)
-      if @options.has_key?('cacert')
-        client.use_ssl = true
-        client.ca_file = @options['cacert']
-        client.verify_mode  = OpenSSL::SSL::VERIFY_PEER
-        client.verify_mode  = @options['ssl_verify_mode'] if @options.has_key?('ssl_verify_mode')
-        client.verify_depth = 5
-        client.verify_depth = @options['ssl_verify_depth'] if @options.has_key?('ssl_verify_depth')
-        client.cert         = @options['ssl_client_cert'] if @options.has_key?('ssl_client_cert')
-        client.key          = @options['ssl_client_key'] if @options.has_key?('ssl_client_key')
-      end
-    end
-
     def request(req)
       req.basic_auth @options['user'], @options['password'] if @options.has_key?('user') and 
         @options.has_key?('password') and 
@@ -104,6 +111,19 @@ module Couch
     end
     
     private
+    
+    def check_ssl(client)
+      if @options.has_key?('cacert')
+        client.use_ssl = true
+        client.ca_file = @options['cacert']
+        client.verify_mode  = OpenSSL::SSL::VERIFY_PEER
+        client.verify_mode  = @options['ssl_verify_mode'] if @options.has_key?('ssl_verify_mode')
+        client.verify_depth = 5
+        client.verify_depth = @options['ssl_verify_depth'] if @options.has_key?('ssl_verify_depth')
+        client.cert         = @options['ssl_client_cert'] if @options.has_key?('ssl_client_cert')
+        client.key          = @options['ssl_client_key'] if @options.has_key?('ssl_client_key')
+      end
+    end
 
     def setup_digest_auth(uri, method)
       return if not @options.has_key?('digest_auth')
