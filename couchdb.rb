@@ -13,13 +13,66 @@ module Couch
   # == Description
   #
   # This version of the Couch::Server class is modified for additional authentication methods.
+  #
   # It supports the following authentication methods with or without SSL connection;
   #
   # * Basic Authentication
   # * Digest Authentication (net-http-digest_auth library is required)
-  # * SSL Client Authentication
-  #   * It is not supported by the CouchDB server, other server application, such as stunnel, is required)
+  # * SSL Client Authentication (It is not supported by the CouchDB server)
   # * CouchDB Proxy Authentication
+  #
+  # Other, Get()/put()/post()/delete(), methods are same as original methods.
+  #
+  # == Usage
+  #
+  #   opts = {}
+  #   server = Couch::Server.new("localhost", "5984", opts)
+  #
+  # The +opts["cacert"]+ enables the SSL connection.
+  #
+  #   opts["cacert"] = "/path/to/cacert.pem"
+  #   server = Couch::Server.new("couchdb.example.org", "443", opts)
+  #
+  # The server hostname must be matched with the Common Name of the server certificate.
+  #
+  # === Basic Authentication
+  #
+  #   opts = {}
+  #   opts["user"] = "username"
+  #   opts["password"] = "xxxxxx"
+  #   server = Couch::Server.new("localhost", "5984", opts)
+  #
+  # === Digest Authentication bfor Apache Proxy
+  # 
+  #   opts = {}
+  #   opts["user"] = "username"
+  #   opts["password"] = "xxxxxx"
+  #   opts["digest_auth"] = ""
+  #   server = Couch::Server.new("localhost", "80", opts)
+  #
+  # The digest authentication is turned on when the "digest_auth" key is defined.
+  #
+  # === SSL Client Authentication for Stunnel
+  #
+  #   opts['user'] = "username"
+  #   opts['password'] = "xxxxxx"
+  #   opts['cacert'] = "/path/to/cacert.pem"
+  #   opts['ssl_client_cert'] = OpenSSL::X509::Certificate.new(File.new("/path/to/cert.pem"))
+  #   opts['ssl_client_key']  = OpenSSL::PKey::RSA.new(File.new("/path/to/key.pem"))
+  #   server = Couch::Server.new("couchdb.example.org", "6984", opts)
+  #
+  # The +ssl_verify_depth+ and +ssl_verify_mode+ are optional.
+  # The default values are followings;
+  #
+  #   opts["ssl_verify_mode"] = OpenSSL::SSL::VERIFY_PEER
+  #   opts["ssl_verify_depth"] = 5
+  #
+  # === Proxy Authentication for proxy_authentification_handler
+  #
+  #   opts["proxy_auth_user"]  = "user01"
+  #   opts["proxy_auth_roles"] = "dbadmin"
+  #   opts["proxy_auth_token"] = "d4c3b0fd10bed9642fb5bbfcc0203ca27c707300"
+  #   server = Couch::Server.new("localhost", "80", opts)
   #
   # == About the original code
   #
